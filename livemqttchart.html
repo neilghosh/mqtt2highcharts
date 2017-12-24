@@ -3,9 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Example of plotting live data with websockets and highcharts</title>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script src="mqttws31.js" type="text/javascript"></script>
 <script type="text/javascript">
 /*
 by @bordignon on twitter
@@ -22,16 +21,16 @@ public broker and topic you can use for testing.
 */
 
 //settings BEGIN
-	var MQTTbroker = 'broker.mqttdashboard.com';
-	var MQTTport = 8000;
-	var MQTTsubTopic = 'dcsquare/cubes/#'; //works with wildcard # and + topics dynamically now
+	var MQTTbroker = 'iot.eclipse.org';
+	var MQTTport = 80;
+	var MQTTsubTopic = 'nexus42013/#'; //works with wildcard # and + topics dynamically now
 //settings END
 
 	var chart; // global variuable for chart
 	var dataTopics = new Array();
 
 //mqtt broker 
-	var client = new Paho.MQTT.Client(MQTTbroker, MQTTport,
+	var client = new Paho.MQTT.Client(MQTTbroker, MQTTport,'/ws',
 				"myclientid_" + parseInt(Math.random() * 100, 10));
 	client.onMessageArrived = onMessageArrived;
 	client.onConnectionLost = onConnectionLost;
@@ -72,7 +71,8 @@ public broker and topic you can use for testing.
 			var newseries = {
 		            id: y,
 		            name: message.destinationName,
-		            data: []
+		            data: [],
+		            visible: false
 		            };
 
 			chart.addSeries(newseries); //add the series
